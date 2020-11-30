@@ -1,6 +1,6 @@
 <h1 align="center">
   <a href="https://github.com/orangebeard-io/javascript-client">
-    <img src="https://raw.githubusercontent.com/orangebeard-io/javascript-client/master/.github/logo.svg" alt="Orangebeard.io JavaScript Client" height="200">
+    <img src="https://raw.githubusercontent.com/orangebeard-io/javascript-client/main/.github/logo.svg" alt="Orangebeard.io JavaScript Client" height="200">
   </a>
   <br>Orangebeard.io JavaScript Client<br>
 </h1>
@@ -16,7 +16,7 @@
     <img src="https://img.shields.io/github/workflow/status/orangebeard-io/javascript-client/release?style=flat-square"
       alt="Build Status" />
   </a>
-  <a href="https://github.com/orangebeard-io/javascript-client/blob/master/LICENSE">
+  <a href="https://github.com/orangebeard-io/javascript-client/blob/main/LICENSE">
     <img src="https://img.shields.io/github/license/orangebeard-io/javascript-client?style=flat-square"
       alt="License" />
   </a>
