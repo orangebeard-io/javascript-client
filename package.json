@@ -1,0 +1,51 @@
+{
+  "name": "@orangebeard-io/javascript-client",
+  "version": "1.0.0",
+  "description": "Orangebeard client for JavaScript",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint \"./**/*.js\" --quiet",
+    "format:js": "npm run lint -- --fix",
+    "format:md": "prettier --write README.md",
+    "format": "npm run format:js && npm run format:md",
+    "test": "jest --detectOpenHandles --config ./jest.config.js",
+    "test:coverage": "jest --coverage",
+    "get-version": "echo $npm_package_version",
+    "update-version": "release-it --ci --no-git --no-npm.publish",
+    "create-changelog": "auto-changelog --template changelog-template.hbs --starting-version v$npm_package_version"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/orangebeard-io/javascript-client.git"
+  },
+  "keywords": [
+    "orangebeard",
+    "javascript",
+    "client"
+  ],
+  "author": "Orangebeard.io",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/orangebeard-io/javascript-client/issues"
+  },
+  "homepage": "https://github.com/orangebeard-io/javascript-client#readme",
+  "dependencies": {
+    "axios": "0.21.0",
+    "axios-retry": "3.1.9",
+    "glob": "7.1.6",
+    "uniqid": "5.2.0"
+  },
+  "devDependencies": {
+    "auto-changelog": "2.2.1",
+    "eslint": "7.14.0",
+    "eslint-config-airbnb-base": "14.2.1",
+    "eslint-config-prettier": "6.15.0",
+    "eslint-plugin-import": "2.22.1",
+    "eslint-plugin-prettier": "3.1.4",
+    "jest": "26.6.3",
+    "lodash": "4.17.20",
+    "nock": "13.0.5",
+    "prettier": "2.2.1",
+    "release-it": "14.2.2"
+  }
+}
