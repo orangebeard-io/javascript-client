@@ -35,6 +35,7 @@ module.exports = {
   saveLaunchIdToFile(launchId) {
     const filename = `oblaunch-${launchId}.tmp`;
     fs.open(filename, 'w', (err) => {
+      /* istanbul ignore next */
       if (err) {
         throw err;
       }

@@ -1,6 +1,7 @@
 const axios = require('axios');
 const axiosRetry = require('axios-retry');
 
+/* istanbul ignore next */
 axiosRetry(axios, {
   retryDelay: () => 100,
   retries: 10,
@@ -21,6 +22,7 @@ class RestClient {
     return [this.baseURL.replace('/v2', '/v1'), path].join('/');
   }
 
+  /* istanbul ignore next */
   static request(method, url, data, options = {}) {
     return axios({
       method,
