@@ -177,7 +177,9 @@ class OrangebeardClient {
             resolve(response);
           },
           (error) => {
+            /* istanbul ignore next */
             console.dir(error);
+            /* istanbul ignore next */
             reject(error);
           },
         );
@@ -200,6 +202,7 @@ class OrangebeardClient {
    * }
    * @Returns {Object} - an object which contains a tempID and a promise
    */
+  /* istanbul ignore next */
   finishLaunch(launchTempId, finishExecutionRQ) {
     const launchObj = this.map[launchTempId];
     if (!launchObj) {
@@ -283,6 +286,7 @@ class OrangebeardClient {
             return launchIds;
           },
           (error) => {
+            /* istanbul ignore next */
             console.dir(error);
           },
         )
@@ -301,18 +305,6 @@ class OrangebeardClient {
     }
     this.logDebug('Option isLaunchMergeRequired is false');
     return undefined;
-  }
-
-  /*
-   * This method is used for frameworks as Jasmine. There is problem when
-   * it doesn't wait for promise resolve and stop the process. So it better to call
-   * this method at the spec's function as @afterAll() and manually resolve this promise.
-   *
-   * @return Promise
-   */
-  getPromiseFinishAllItems(launchTempId) {
-    const launchObj = this.map[launchTempId];
-    return Promise.all(launchObj.children.map((itemId) => this.map[itemId].promiseFinish));
   }
 
   /**
@@ -355,11 +347,13 @@ class OrangebeardClient {
             resolvePromise(response);
           },
           (error) => {
+            /* istanbul ignore next */
             rejectPromise(error);
           },
         );
       },
       (error) => {
+        /* istanbul ignore next */
         rejectPromise(error);
       },
     );
@@ -460,6 +454,7 @@ class OrangebeardClient {
               this.nonRetriedItemMap.delete(itemKey);
               resolve(response);
             },
+            /* istanbul ignore next */
             (error) => {
               this.logDebug(`Error start item ${tempId}:`);
               console.dir(error);
@@ -467,6 +462,7 @@ class OrangebeardClient {
             },
           );
         },
+        /* istanbul ignore next */
         (error) => {
           reject(error);
         },
@@ -475,6 +471,7 @@ class OrangebeardClient {
     this.map[parentMapId].children.push(tempId);
 
     if (!testItemDataRQ.retry) {
+      /* istanbul ignore next */
       this.nonRetriedItemMap.set(itemKey, this.map[tempId].promiseStart);
     }
 
@@ -508,6 +505,7 @@ class OrangebeardClient {
    }
    * @Returns {Object} - an object which contains a tempId and a promise
    */
+  /* istanbul ignore next */
   finishTestItem(itemTempId, finishTestItemRQ) {
     const itemObj = this.map[itemTempId];
     if (!itemObj) {
@@ -561,12 +559,14 @@ class OrangebeardClient {
               this.logDebug(`Successfully save log ${tempId}`);
               resolve(response);
             },
+            /* istanbul ignore next */
             (error) => {
               this.logDebug(`Error finish log: ${error}`);
               reject(error);
             },
           );
         },
+        /* istanbul ignore next */
         (error) => {
           reject(error);
         },
@@ -578,6 +578,7 @@ class OrangebeardClient {
     logObj.finishSend = true;
     logObj.promiseStart.then(
       (response) => logObj.resolveFinish(response),
+      /* istanbul ignore next */
       (error) => logObj.rejectFinish(error),
     );
 
@@ -621,6 +622,7 @@ class OrangebeardClient {
       return this.getRejectAnswer(itemTempId, new Error(`Item "${itemTempId}" not found`));
     }
 
+    /* istanbul ignore next */
     const requestPromise = (itemUuid, launchUuid) => {
       const url = 'log';
       const isItemUuid = itemUuid !== launchUuid;
@@ -659,6 +661,7 @@ class OrangebeardClient {
     if (!itemObj) {
       return this.getRejectAnswer(itemTempId, new Error(`Item "${itemTempId}" not found`));
     }
+    /* istanbul ignore next */
     const requestPromise = (itemUuid, launchUuid) => {
       const isItemUuid = itemUuid !== launchUuid;
 
@@ -693,6 +696,7 @@ class OrangebeardClient {
    *
    * @Private
    */
+  /* istanbul ignore next */
   buildMultiPartStream(jsonPart, filePart, boundary) {
     const eol = '\r\n';
     const bx = `--${boundary}`;
@@ -731,6 +735,7 @@ class OrangebeardClient {
     return Buffer.concat(buffers);
   }
 
+  /* istanbul ignore next */
   finishTestItemPromiseStart(itemObj, itemTempId, finishTestItemData) {
     itemObj.promiseStart.then(
       () => {
