@@ -13,7 +13,7 @@ class OrangebeardClient {
    * params should look like this
    * {
    *      token: "00000000-0000-0000-0000-000000000000",
-   *      endpoint: "http://orangebeard:8080/api/v1",
+   *      endpoint: "http://orangebeard:8080/listener/v1",
    *      launch: "YOUR LAUNCH NAME",
    *      project: "PROJECT NAME",
    * }
