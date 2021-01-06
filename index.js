@@ -101,7 +101,7 @@ class OrangebeardClient {
   }
 
   checkConnect() {
-    const url = [this.config.endpoint.replace('/v2', '/v1'), 'user'].join('/');
+    const url = [this.config.endpoint, 'user'].join('/');
     return RestClient.request('GET', url, {}, { headers: this.headers });
   }
 
