@@ -4,9 +4,9 @@ const RestClient = require('../utils/rest');
 
 describe('RestClient', () => {
   const options = {
-    baseURL: 'https://orangebeard-host:8080/api/v1',
+    baseURL: 'https://orangebeard-host:8080/listener/v1',
     headers: {
-      Authorization: 'bearer 00000000-0000-0000-0000-000000000000',
+      Authorization: 'Bearer 00000000-0000-0000-0000-000000000000',
       'User-Agent': 'NodeJS',
     },
   };

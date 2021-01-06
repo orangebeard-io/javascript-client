@@ -77,7 +77,7 @@ describe('Orangebeard JavaScript Client', () => {
 
   describe('checkConnect', () => {
     it('should return promise', () => {
-      const client = new OrangebeardClient({ endpoint: 'https://orangebeard.io/api/v1' });
+      const client = new OrangebeardClient({ endpoint: 'https://orangebeard.io/listener/v1' });
       jest.spyOn(RestClient, 'request').mockImplementation(() => Promise.resolve('ok'));
 
       const request = client.checkConnect();
@@ -102,7 +102,7 @@ describe('Orangebeard JavaScript Client', () => {
       ];
       const client = new OrangebeardClient({
         token: 'startLaunchTest',
-        endpoint: 'https://orangebeard.io/api/v1',
+        endpoint: 'https://orangebeard.io/listener/v1',
         project: 'tst',
       });
       const myPromise = Promise.resolve({ id: 'testidlaunch' });
@@ -135,7 +135,7 @@ describe('Orangebeard JavaScript Client', () => {
       ];
       const client = new OrangebeardClient({
         token: 'startLaunchTest',
-        endpoint: 'https://orangebeard.io/api/v1',
+        endpoint: 'https://orangebeard.io/listener/v1',
         project: 'tst',
       });
       client.isLaunchMergeRequired = true;
@@ -170,7 +170,7 @@ describe('Orangebeard JavaScript Client', () => {
     it('dont start new launch if launchDataRQ.id is not empty', () => {
       const client = new OrangebeardClient({
         token: 'startLaunchTest',
-        endpoint: 'https://orangebeard.io/api/v1',
+        endpoint: 'https://orangebeard.io/listener/v1',
         project: 'tst',
       });
       const myPromise = Promise.resolve({ id: 'testidlaunch' });
@@ -267,7 +267,7 @@ describe('Orangebeard JavaScript Client', () => {
     it('should calls client', (done) => {
       const client = new OrangebeardClient({
         token: 'startLaunchTest',
-        endpoint: 'https://orangebeard.io/api/v1',
+        endpoint: 'https://orangebeard.io/listener/v1',
         project: 'tst',
         isLaunchMergeRequired: true,
       });
@@ -315,7 +315,7 @@ describe('Orangebeard JavaScript Client', () => {
     it('should return undefined if isLaunchMergeRequired is false', () => {
       const client = new OrangebeardClient({
         token: 'startLaunchTest',
-        endpoint: 'https://orangebeard.io/api/v1',
+        endpoint: 'https://orangebeard.io/listener/v1',
         project: 'tst',
         isLaunchMergeRequired: false,
       });

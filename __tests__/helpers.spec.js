@@ -34,7 +34,7 @@ describe('Helpers', () => {
       jest.spyOn(RestClient, 'request');
 
       client.helpers.getServerResult(
-        'http://localhost:80/api/v1',
+        'http://localhost:80/listener/v1',
         { userId: 1 },
         {
           headers: {
@@ -46,7 +46,7 @@ describe('Helpers', () => {
 
       expect(RestClient.request).toHaveBeenCalledWith(
         'POST',
-        'http://localhost:80/api/v1',
+        'http://localhost:80/listener/v1',
         { userId: 1 },
         {
           headers: {
