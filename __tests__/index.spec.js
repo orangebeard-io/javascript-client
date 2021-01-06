@@ -77,7 +77,7 @@ describe('Orangebeard JavaScript Client', () => {
 
   describe('checkConnect', () => {
     it('should return promise', () => {
-      const client = new OrangebeardClient({ endpoint: 'endpoint' });
+      const client = new OrangebeardClient({ endpoint: 'https://orangebeard.io/api/v1' });
       jest.spyOn(RestClient, 'request').mockImplementation(() => Promise.resolve('ok'));
 
       const request = client.checkConnect();
