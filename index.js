@@ -28,7 +28,7 @@ class OrangebeardClient {
     const headers = Object.assign(
       {
         'User-Agent': 'NodeJS',
-        Authorization: `bearer ${params.token}`,
+        Authorization: `Bearer ${params.token}`,
       },
       params.headers || {},
     );
