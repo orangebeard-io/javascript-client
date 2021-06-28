@@ -308,6 +308,18 @@ class OrangebeardClient {
     return undefined;
   }
 
+  /*
+   * This method is used for frameworks as Jasmine. There is problem when
+   * it doesn't wait for promise resolve and stop the process. So it better to call
+   * this method at the spec's function as @afterAll() and manually resolve this promise.
+   *
+   * @return Promise
+   */
+  getPromiseFinishAllItems(launchTempId) {
+    const launchObj = this.map[launchTempId];
+    return Promise.all(launchObj.children.map((itemId) => this.map[itemId].promiseFinish));
+  }
+
   /**
    * Update launch.
    * @param {string} launchTempId - temp launch id (returned in the query "startLaunch").
