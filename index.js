@@ -42,6 +42,7 @@ class OrangebeardClient {
     this.restClient = new RestClient({
       baseURL: this.baseURL,
       headers: this.headers,
+      restClientConfig: params.restClientConfig,
     });
     this.launchUuid = '';
     this.nonRetriedItemMap = new Map();
@@ -521,7 +522,9 @@ class OrangebeardClient {
     );
 
     itemObj.finishSend = true;
-    Promise.all(itemObj.children.map((itemId) => this.map[itemId].promiseFinish)).then(
+    Promise.all(
+      itemObj.children.map((itemId) => this.map[itemId] && this.map[itemId].promiseFinish),
+    ).then(
       () => {
         this.cleanMap(itemObj.children);
         this.finishTestItemPromiseStart(
