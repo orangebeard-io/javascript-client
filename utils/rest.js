@@ -1,5 +1,8 @@
 const axios = require('axios');
 const axiosRetry = require('axios-retry');
+const https = require('https');
+
+const DEFAULT_MAX_CONNECTION_TIME_MS = 30000;
 
 /* istanbul ignore next */
 axiosRetry(axios, {
@@ -12,6 +15,7 @@ class RestClient {
   constructor(options) {
     this.baseURL = options.baseURL;
     this.headers = options.headers;
+    this.restClientConfig = options.restClientConfig;
   }
 
   buildPath(path) {
@@ -29,6 +33,7 @@ class RestClient {
       url,
       headers: options.headers,
       data,
+      timeout: DEFAULT_MAX_CONNECTION_TIME_MS,
     })
       .then((response) => response.data)
       .catch((error) => {
@@ -44,24 +49,66 @@ class RestClient {
       });
   }
 
+  getRestConfig() {
+    if (!this.restClientConfig) return {};
+
+    const config = Object.keys(this.restClientConfig).reduce((acc, key) => {
+      if (key !== 'agent') {
+        acc[key] = this.restClientConfig[key];
+      }
+      return acc;
+    }, {});
+
+    if ('agent' in this.restClientConfig) {
+      config.httpsAgent = https.Agent(this.restClientConfig.agent);
+    }
+
+    return config;
+  }
+
   create(path, data, options = { headers: this.headers }) {
-    return RestClient.request('POST', this.buildPath(path), data, options);
+    return RestClient.request(
+      'POST',
+      this.buildPath(path),
+      data,
+      Object.assign({}, options, this.getRestConfig()),
+    );
   }
 
   retrieve(path, options = { headers: this.headers }) {
-    return RestClient.request('GET', this.buildPath(path), {}, options);
+    return RestClient.request(
+      'GET',
+      this.buildPath(path),
+      {},
+      Object.assign({}, options, this.getRestConfig()),
+    );
   }
 
   update(path, data, options = { headers: this.headers }) {
-    return RestClient.request('PUT', this.buildPath(path), data, options);
+    return RestClient.request(
+      'PUT',
+      this.buildPath(path),
+      data,
+      Object.assign({}, options, this.getRestConfig()),
+    );
   }
 
   delete(path, data, options = { headers: this.headers }) {
-    return RestClient.request('DELETE', this.buildPath(path), data, options);
+    return RestClient.request(
+      'DELETE',
+      this.buildPath(path),
+      data,
+      Object.assign({}, options, this.getRestConfig()),
+    );
   }
 
   retrieveSyncAPI(path, options = { headers: this.headers }) {
-    return RestClient.request('GET', this.buildPathToSyncAPI(path), {}, options);
+    return RestClient.request(
+      'GET',
+      this.buildPathToSyncAPI(path),
+      {},
+      Object.assign({}, options, this.getRestConfig()),
+    );
   }
 }
 
