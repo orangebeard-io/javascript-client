@@ -2,7 +2,7 @@ const axios = require('axios');
 const axiosRetry = require('axios-retry');
 const https = require('https');
 
-const DEFAULT_MAX_CONNECTION_TIME_MS = 30000;
+const DEFAULT_MAX_CONNECTION_TIME_MS = 120000;
 
 /* istanbul ignore next */
 axiosRetry(axios, {
@@ -33,7 +33,7 @@ class RestClient {
       url,
       headers: options.headers,
       data,
-      timeout: DEFAULT_MAX_CONNECTION_TIME_MS,
+      timeout: options.timeout,
     })
       .then((response) => response.data)
       .catch((error) => {
@@ -66,7 +66,7 @@ class RestClient {
     return config;
   }
 
-  create(path, data, options = { headers: this.headers }) {
+  create(path, data, options = { headers: this.headers, timeout: DEFAULT_MAX_CONNECTION_TIME_MS }) {
     return RestClient.request(
       'POST',
       this.buildPath(path),
@@ -75,7 +75,7 @@ class RestClient {
     );
   }
 
-  retrieve(path, options = { headers: this.headers }) {
+  retrieve(path, options = { headers: this.headers, timeout: DEFAULT_MAX_CONNECTION_TIME_MS }) {
     return RestClient.request(
       'GET',
       this.buildPath(path),
@@ -84,7 +84,7 @@ class RestClient {
     );
   }
 
-  update(path, data, options = { headers: this.headers }) {
+  update(path, data, options = { headers: this.headers, timeout: DEFAULT_MAX_CONNECTION_TIME_MS }) {
     return RestClient.request(
       'PUT',
       this.buildPath(path),
@@ -93,7 +93,7 @@ class RestClient {
     );
   }
 
-  delete(path, data, options = { headers: this.headers }) {
+  delete(path, data, options = { headers: this.headers, timeout: DEFAULT_MAX_CONNECTION_TIME_MS }) {
     return RestClient.request(
       'DELETE',
       this.buildPath(path),
@@ -102,7 +102,10 @@ class RestClient {
     );
   }
 
-  retrieveSyncAPI(path, options = { headers: this.headers }) {
+  retrieveSyncAPI(
+    path,
+    options = { headers: this.headers, timeout: DEFAULT_MAX_CONNECTION_TIME_MS },
+  ) {
     return RestClient.request(
       'GET',
       this.buildPathToSyncAPI(path),
