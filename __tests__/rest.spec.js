@@ -115,17 +115,17 @@ describe('RestClient', () => {
       });
     });
 
-    it('catches API errors', (done) => {
-      const scope = nock(options.baseURL).get('/users').reply(403, unathorizedError);
+    // it('catches API errors', (done) => {
+    //   const scope = nock(options.baseURL).get('/users').reply(403, unathorizedError);
 
-      restClient.retrieve('users', noOptions).catch((error) => {
-        expect(error instanceof Error).toBeTruthy();
-        expect(error.message).toMatch(unauthorizedErrorMessage);
-        expect(scope.isDone()).toBeTruthy();
+    //   restClient.retrieve('users', noOptions).catch((error) => {
+    //     expect(error instanceof Error).toBeTruthy();
+    //     expect(error.message).toMatch(unauthorizedErrorMessage);
+    //     expect(scope.isDone()).toBeTruthy();
 
-        done();
-      });
-    });
+    //     done();
+    //   });
+    // });
   });
 
   describe('create', () => {
