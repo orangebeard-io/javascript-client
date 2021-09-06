@@ -1,5 +1,3 @@
-const axios = require('axios');
-const axiosRetry = require('axios-retry');
 const https = require('https');
 const nock = require('nock');
 const isEqual = require('lodash/isEqual');
@@ -70,25 +68,6 @@ describe('RestClient', () => {
     });
   });
 
-  describe('axiosRetry(axios, { retries, retryCondition })', () => {
-    const AxiosInstance = axios.create();
-    it('should execute for each retry', () => {
-      let retryCount = 0;
-      axiosRetry(AxiosInstance, {
-        retries: 3,
-        retryCondition: () => false,
-        retryDelay: () => {
-          retryCount += 1;
-          return 0;
-        },
-      });
-
-      AxiosInstance.get('http://example.com/test').then(() => {
-        expect(retryCount).toBe(2);
-      });
-    });
-  });
-
   describe('retrieve', () => {
     it('performs GET request for resource', (done) => {
       const listOfUsers = [{ id: 1 }, { id: 2 }, { id: 3 }];
@@ -115,17 +94,17 @@ describe('RestClient', () => {
       });
     });
 
-    // it('catches API errors', (done) => {
-    //   const scope = nock(options.baseURL).get('/users').reply(403, unathorizedError);
+    it('catches API errors', (done) => {
+      const scope = nock(options.baseURL).get('/users').reply(403, unathorizedError);
 
-    //   restClient.retrieve('users', noOptions).catch((error) => {
-    //     expect(error instanceof Error).toBeTruthy();
-    //     expect(error.message).toMatch(unauthorizedErrorMessage);
-    //     expect(scope.isDone()).toBeTruthy();
+      restClient.retrieve('users', noOptions).catch((error) => {
+        expect(error instanceof Error).toBeTruthy();
+        expect(error.message).toMatch(unauthorizedErrorMessage);
+        expect(scope.isDone()).toBeTruthy();
 
-    //     done();
-    //   });
-    // });
+        done();
+      });
+    });
   });
 
   describe('create', () => {
