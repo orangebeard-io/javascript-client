@@ -1,3 +1,4 @@
+const https = require('https');
 const nock = require('nock');
 const isEqual = require('lodash/isEqual');
 const RestClient = require('../utils/rest');
@@ -8,6 +9,12 @@ describe('RestClient', () => {
     headers: {
       Authorization: 'Bearer 00000000-0000-0000-0000-000000000000',
       'User-Agent': 'NodeJS',
+    },
+    restClientConfig: {
+      agent: {
+        rejectUnauthorized: false,
+      },
+      timeout: 0,
     },
   };
   const noOptions = {};
@@ -26,6 +33,7 @@ describe('RestClient', () => {
     it('creates object with correct properties', () => {
       expect(restClient.baseURL).toBe(options.baseURL);
       expect(restClient.headers).toEqual(options.headers);
+      expect(restClient.restClientConfig).toEqual(options.restClientConfig);
     });
   });
 
@@ -34,6 +42,29 @@ describe('RestClient', () => {
       expect(restClient.buildPath('users')).toBe(`${options.baseURL}/users`);
       expect(restClient.buildPath('users/123')).toBe(`${options.baseURL}/users/123`);
       expect(restClient.buildPath()).toBe(`${options.baseURL}/`);
+    });
+  });
+
+  describe('getRestConfig', () => {
+    it("return {} in case agent property is doesn't exist", () => {
+      restClient.restClientConfig = false;
+      expect(restClient.getRestConfig()).toEqual({});
+
+      restClient.restClientConfig = {};
+      expect(restClient.getRestConfig()).toEqual({});
+    });
+
+    it('creates object with correct properties with http(s) agent', () => {
+      restClient.restClientConfig = {
+        agent: {
+          rejectUnauthorized: false,
+        },
+        timeout: 10000,
+      };
+      expect(restClient.getRestConfig().httpsAgent).toBeDefined();
+      expect(restClient.getRestConfig().httpsAgent).toBeInstanceOf(https.Agent);
+      expect(restClient.getRestConfig().timeout).toBe(10000);
+      expect(restClient.getRestConfig().agent).toBeUndefined();
     });
   });
 

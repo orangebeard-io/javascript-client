@@ -326,6 +326,25 @@ describe('Orangebeard JavaScript Client', () => {
     });
   });
 
+  describe('getPromiseFinishAllItems', () => {
+    it('should return promise', (done) => {
+      const client = new OrangebeardClient({});
+      client.map = {
+        id1: {
+          children: ['child1'],
+        },
+        child1: {
+          promiseFinish: Promise.resolve(),
+        },
+      };
+
+      const promise = client.getPromiseFinishAllItems('id1');
+
+      expect(promise.then).toBeDefined();
+      done();
+    });
+  });
+
   describe('updateLaunch', () => {
     it('should call getRejectAnswer if there is no launchTempId with suitable launchTempId', () => {
       const client = new OrangebeardClient({
@@ -549,6 +568,98 @@ describe('Orangebeard JavaScript Client', () => {
     //     done();
     //   }, 100);
     // });
+  });
+
+  describe('startAndFinishTestItem', () => {
+    it('should call getRejectAnswer if there is no launchTempId with suitable launchTempId', () => {
+      const client = new OrangebeardClient({
+        token: 'any',
+        endpoint: 'https://orangebeard.api',
+        project: 'prj',
+      });
+      client.map = {
+        id1: {
+          children: ['child1'],
+        },
+      };
+      jest.spyOn(client, 'getRejectAnswer');
+
+      client.startAndFinishTestItem({}, 'id2', null, {});
+
+      expect(client.getRejectAnswer).toHaveBeenCalledWith(
+        'id2',
+        new Error('Launch "id2" not found'),
+      );
+    });
+
+    it('should call getRejectAnswer if launchObj.finishSend is true', () => {
+      const client = new OrangebeardClient({
+        token: 'any',
+        endpoint: 'https://orangebeard.api',
+        project: 'prj',
+      });
+      client.map = {
+        id1: {
+          children: ['child1'],
+          finishSend: true,
+        },
+      };
+      jest.spyOn(client, 'getRejectAnswer');
+      const error = new Error('Launch "id1" is already finished, you can not add an item to it');
+
+      client.startAndFinishTestItem({}, 'id1', null, {});
+
+      expect(client.getRejectAnswer).toHaveBeenCalledWith('id1', error);
+    });
+
+    it('should call getRejectAnswer if there is no parentObj with suitable parentTempId', () => {
+      const client = new OrangebeardClient({
+        token: 'any',
+        endpoint: 'https://orangebeard.api',
+        project: 'prj',
+      });
+      client.map = {
+        id: {
+          children: ['id1'],
+        },
+        id1: {
+          children: ['child1'],
+        },
+      };
+      jest.spyOn(client, 'getRejectAnswer');
+      const error = new Error('Item "id3" not found');
+
+      client.startAndFinishTestItem({ testCaseId: 'testCaseId' }, 'id1', 'id3', {});
+
+      expect(client.getRejectAnswer).toHaveBeenCalledWith('id1', error);
+    });
+
+    it('should return object with tempId and promise', () => {
+      const client = new OrangebeardClient({
+        token: 'any',
+        endpoint: 'https://orangebeard.api',
+        project: 'prj',
+      });
+      client.map = {
+        id: {
+          children: ['id1', '4n5pxq24kpiob12og9'],
+          promiseStart: Promise.resolve(),
+        },
+        id1: {
+          children: ['child1'],
+          promiseStart: Promise.resolve(),
+        },
+        '4n5pxq24kpiob12og9': {
+          promiseStart: Promise.resolve(),
+        },
+      };
+      jest.spyOn(client.nonRetriedItemMap, 'get').mockImplementation(() => Promise.resolve());
+      jest.spyOn(client.restClient, 'create').mockImplementation(() => Promise.resolve({}));
+
+      const result = client.startAndFinishTestItem({ retry: true }, 'id1', 'id', {});
+
+      return expect(result.promise).resolves.toStrictEqual({});
+    });
   });
 
   describe('saveLog', () => {
