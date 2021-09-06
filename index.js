@@ -563,6 +563,146 @@ class OrangebeardClient {
     };
   }
 
+  /**
+   * If there is no parentItemId starts Suite, else starts test or item.
+   * @param {Object} testItemDataRQ - object with item parameters
+   * testItemDataRQ should look like this
+   * {
+          "description": "string" (support markdown),
+          "name": "string",
+          "startTime": this.helper.now(),
+          "attributes": [
+              {
+                  "key": "string",
+                  "value": "string"
+              },
+              {
+                  "value": "string"
+              }
+          ],
+          "type": 'SUITE' or one of 'SUITE', 'STORY', 'TEST',
+                  'SCENARIO', 'STEP', 'BEFORE_CLASS', 'BEFORE_GROUPS',
+                  'BEFORE_METHOD', 'BEFORE_SUITE', 'BEFORE_TEST',
+                  'AFTER_CLASS', 'AFTER_GROUPS', 'AFTER_METHOD',
+                  'AFTER_SUITE', 'AFTER_TEST'
+      }
+   * @param {string} launchTempId - temp launch id (returned in the query "startLaunch").
+   * @param {string} parentTempId (optional) - temp item id (returned in the query "startTestItem").
+   * * @param {Object} finishTestItemRQ - object with item parameters.
+   * finishTestItemRQ should look like this
+   {
+      "endTime": this.helper.now(),
+      "issue": {
+        "comment": "string",
+        "externalSystemIssues": [
+          {
+            "submitDate": 0,
+            "submitter": "string",
+            "systemId": "string",
+            "ticketId": "string",
+            "url": "string"
+          }
+        ],
+        "issueType": "string"
+      },
+      "status": "passed" or one of 'passed', 'failed', 'stopped', 'skipped', 'interrupted', 'cancelled'
+   }
+   * @Returns {Object} - an object which contains a tempId and a promise
+   */
+  startAndFinishTestItem(testItemDataRQ, launchTempId, parentTempId, finishTestItemRQ) {
+    let parentMapId = launchTempId;
+    const launchObj = this.map[launchTempId];
+    if (!launchObj) {
+      return this.getRejectAnswer(launchTempId, new Error(`Launch "${launchTempId}" not found`));
+    }
+    if (launchObj.finishSend) {
+      const err = new Error(
+        `Launch "${launchTempId}" is already finished, you can not add an item to it`,
+      );
+      return this.getRejectAnswer(launchTempId, err);
+    }
+
+    const testCaseId =
+      testItemDataRQ.testCaseId ||
+      helpers.generateTestCaseId(testItemDataRQ.codeRef, testItemDataRQ.parameters);
+    const testItemData = Object.assign(
+      {
+        startTime: this.helpers.now(),
+        endTime: this.helpers.now(),
+      },
+      testItemDataRQ,
+      testCaseId && { testCaseId },
+      launchObj.children.length ? {} : { status: STATUSES.PASSED },
+      finishTestItemRQ,
+    );
+
+    let parentPromise = launchObj.promiseStart;
+    if (parentTempId) {
+      parentMapId = parentTempId;
+      const parentObj = this.map[parentTempId];
+      if (!parentObj) {
+        return this.getRejectAnswer(launchTempId, new Error(`Item "${parentTempId}" not found`));
+      }
+      parentPromise = parentObj.promiseStart;
+    }
+
+    const itemKey = this.calculateNonRetriedItemMapKey(
+      launchTempId,
+      parentTempId,
+      testItemDataRQ.name,
+      testItemDataRQ.uniqueId,
+    );
+    const firstNonRetriedItemPromise = testItemDataRQ.retry && this.nonRetriedItemMap.get(itemKey);
+    if (firstNonRetriedItemPromise) {
+      parentPromise = Promise.all([parentPromise, firstNonRetriedItemPromise]);
+    }
+
+    const tempId = this.getUniqId();
+    this.map[tempId] = this.getNewItemObj((resolve, reject) => {
+      parentPromise.then(
+        () => {
+          const realLaunchId = this.map[launchTempId].realId;
+          let url = 'item/start-and-finish/';
+          if (parentTempId) {
+            const realParentId = this.map[parentTempId].realId;
+            url += `${realParentId}`;
+          }
+          testItemData.launchUuid = realLaunchId;
+          this.logDebug(`Start and finish test item ${tempId}`);
+          this.restClient.create(url, testItemData, { headers: this.headers }).then(
+            (response) => {
+              this.logDebug(`Success start and finish item ${tempId}`);
+              this.map[tempId].resolveFinish(response);
+              this.nonRetriedItemMap.delete(itemKey);
+              resolve(response);
+            },
+            /* istanbul ignore next */
+            (error) => {
+              this.logDebug(`Error start and finish item ${tempId}:`);
+              this.map[tempId].rejectFinish(error);
+              console.dir(error);
+              reject(error);
+            },
+          );
+        },
+        /* istanbul ignore next */
+        (error) => {
+          reject(error);
+        },
+      );
+    });
+    this.map[parentMapId].children.push(tempId);
+
+    if (!testItemDataRQ.retry) {
+      /* istanbul ignore next */
+      this.nonRetriedItemMap.set(itemKey, this.map[tempId].promiseStart);
+    }
+
+    return {
+      promise: this.map[tempId].promiseStart,
+    };
+  }
+
   saveLog(itemObj, requestPromiseFunc) {
     const tempId = this.getUniqId();
     this.map[tempId] = this.getNewItemObj((resolve, reject) => {
