@@ -4,7 +4,6 @@ const https = require('https');
 
 const DEFAULT_MAX_CONNECTION_TIME_MS = 120000;
 
-/* istanbul ignore next */
 axiosRetry(axios, {
   retryDelay: () => 100,
   retries: 10,
@@ -26,7 +25,6 @@ class RestClient {
     return [this.baseURL.replace('/v2', '/v1'), path].join('/');
   }
 
-  /* istanbul ignore next */
   static request(method, url, data, options = {}) {
     return axios({
       method,
