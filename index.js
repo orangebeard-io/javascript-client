@@ -21,14 +21,15 @@ class OrangebeardClient {
    *
    */
   constructor(params) {
-    //Try autoConfig if no configuration is provided
-    const settings = !arguments.length ? 
-      {
-        token: autoConfig.accessToken,
-        endpoint: [autoConfig.endpoint, 'listener', 'v2'].join('/'),
-        launch: autoConfig.testset,
-        project: autoConfig.project,
-      } : params;
+    // Try autoConfig if no configuration is provided
+    const settings = !arguments.length
+      ? {
+          token: autoConfig.accessToken,
+          endpoint: [autoConfig.endpoint, 'listener', 'v2'].join('/'),
+          launch: autoConfig.testset,
+          project: autoConfig.project,
+        }
+      : params;
 
     this.debug = settings.debug;
     this.isLaunchMergeRequired =

@@ -1,7 +1,6 @@
 const path = require('path');
 const fs = require('fs');
 
-
 const getAppOptions = (pathToResolve) => {
   let traversing = true;
 
@@ -10,10 +9,10 @@ const getAppOptions = (pathToResolve) => {
     traversing = pathToResolve !== path.sep;
 
     const configFilePath = path.join(pathToResolve, 'orangebeard.json');
-    if (fs.existsSync(configFilePath)) {    
+    if (fs.existsSync(configFilePath)) {
       try {
         // eslint-disable-next-line global-require,import/no-dynamic-require
-        let options = JSON.parse(fs.readFileSync(configFilePath));        
+        let options = JSON.parse(fs.readFileSync(configFilePath));
         if (typeof options !== 'object') {
           options = {};
         }
@@ -30,4 +29,3 @@ const getAppOptions = (pathToResolve) => {
 };
 
 module.exports = getAppOptions('./');
-
