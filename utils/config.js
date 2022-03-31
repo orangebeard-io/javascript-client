@@ -5,7 +5,7 @@ const getAppOptions = (pathToResolve) => {
   let traversing = true;
   let prevPath;
   // Find nearest orangebeard.json by traversing up directories until /
-  while (traversing) {   
+  while (traversing) {
     const configFilePath = path.join(pathToResolve, 'orangebeard.json');
     if (fs.existsSync(configFilePath)) {
       try {
@@ -19,9 +19,10 @@ const getAppOptions = (pathToResolve) => {
         return {};
       }
     }
-    // eslint-disable-next-line no-param-reassign
+    /* eslint-disable no-param-reassign */
     prevPath = pathToResolve;
     pathToResolve = path.dirname(pathToResolve);
+    /* eslint-disable no-param-reassign */
     traversing = pathToResolve !== prevPath;
   }
 
