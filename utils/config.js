@@ -29,4 +29,4 @@ const getAppOptions = (pathToResolve) => {
   return {};
 };
 
-module.exports = getAppOptions(__dirname);
+module.exports = getAppOptions(process.cwd());
