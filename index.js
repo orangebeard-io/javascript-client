@@ -1,6 +1,7 @@
 const UniqId = require('uniqid');
 const { URLSearchParams } = require('url');
 const helpers = require('./utils/helpers');
+const autoConfig = require('./utils/config');
 const RestClient = require('./utils/rest');
 const { STATUSES } = require('./constants/statuses');
 
@@ -13,36 +14,46 @@ class OrangebeardClient {
    * params should look like this
    * {
    *      token: "00000000-0000-0000-0000-000000000000",
-   *      endpoint: "http://orangebeard:8080/listener/v1",
+   *      endpoint: "http://orangebeard:8080/listener/v2",
    *      launch: "YOUR LAUNCH NAME",
    *      project: "PROJECT NAME",
    * }
    *
    */
   constructor(params) {
-    this.debug = params.debug;
+    // Try autoConfig if no configuration is provided
+    const settings = !arguments.length
+      ? {
+          token: autoConfig.accessToken,
+          endpoint: [autoConfig.endpoint, 'listener', 'v2'].join('/'),
+          launch: autoConfig.testset,
+          project: autoConfig.project,
+        }
+      : params;
+
+    this.debug = settings.debug;
     this.isLaunchMergeRequired =
-      params.isLaunchMergeRequired === undefined ? false : params.isLaunchMergeRequired;
+      settings.isLaunchMergeRequired === undefined ? false : settings.isLaunchMergeRequired;
     this.map = {};
-    this.baseURL = [params.endpoint, params.project].join('/');
+    this.baseURL = [settings.endpoint, settings.project].join('/');
     const headers = Object.assign(
       {
         'User-Agent': 'NodeJS',
-        Authorization: `Bearer ${params.token}`,
+        Authorization: `Bearer ${settings.token}`,
       },
-      params.headers || {},
+      settings.headers || {},
     );
     this.headers = headers;
     this.options = {
       headers,
     };
-    this.token = params.token;
-    this.config = params;
+    this.token = settings.token;
+    this.config = settings;
     this.helpers = helpers;
     this.restClient = new RestClient({
       baseURL: this.baseURL,
       headers: this.headers,
-      restClientConfig: params.restClientConfig,
+      restClientConfig: settings.restClientConfig,
     });
     this.launchUuid = '';
     this.nonRetriedItemMap = new Map();
