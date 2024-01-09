@@ -12,3 +12,4 @@ oblaunch-*.tmp
 
 # dist
 build/**
+package-lock.json
