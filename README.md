@@ -38,6 +38,12 @@
 npm install --save-dev @orangebeard-io/javascript-client
 ```
 
+## Build from source
+```shell
+npm run build
+```
+Make sure to have typescript installed.
+
 ## Configuration
 
 Create a new file named `orangebeard.json` in the project root folder, next to `package.json`. Add the following entry:

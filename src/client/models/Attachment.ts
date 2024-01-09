@@ -1,13 +1,20 @@
+import { UUID } from 'crypto';
+
+export type Attachment = {
+    file: AttachmentFile;
+    metaData: AttachmentMetaData;
+}
+
 export type AttachmentMetaData = {
-    testRunUUID: string;
-    testUUID: string;
-    logUUID: string;
-    stepUUID?: string;
+    testRunUUID: UUID;
+    testUUID: UUID;
+    logUUID: UUID;
+    stepUUID?: UUID;
     attachmentTime: string;
 }
 
 export type AttachmentFile = {
     name: string;
-    content: string;
+    content: Float32Array;
     contentType: string;
 }

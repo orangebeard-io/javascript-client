@@ -1,15 +1,9 @@
-/* generated using openapi-typescript-codegen -- do no edit */
-/* istanbul ignore file */
-/* tslint:disable */
-/* eslint-disable */
+import { UUID } from 'crypto';
 
-/**
- * Start step request body
- */
 export type StartStep = {
-    testRunUUID: string;
-    testUUID: string;
-    parentStepUUID?: string;
+    testRunUUID: UUID;
+    testUUID: UUID;
+    parentStepUUID?: UUID;
     stepName: string;
     description?: string;
     startTime: string;

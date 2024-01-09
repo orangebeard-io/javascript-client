@@ -1,10 +1,7 @@
-/* generated using openapi-typescript-codegen -- do no edit */
-/* istanbul ignore file */
-/* tslint:disable */
-/* eslint-disable */
+import { UUID } from 'crypto';
 
 export type FinishStep = {
-    testRunUUID: string;
+    testRunUUID: UUID;
     status: FinishStep.status;
     endTime: string;
 };

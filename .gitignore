@@ -3,8 +3,12 @@ node_modules/
 
 # ide
 .idea/
+.vscode/
 
 .npmrc
 coverage/
 
 oblaunch-*.tmp
+
+# dist
+build/**

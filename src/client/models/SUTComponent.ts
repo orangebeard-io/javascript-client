@@ -1,20 +1,15 @@
-/* generated using openapi-typescript-codegen -- do no edit */
-/* istanbul ignore file */
-/* tslint:disable */
-/* eslint-disable */
-
 export type SUTComponent = {
     componentId?: string;
     componentName?: string;
     version?: string;
-    status?: SUTComponent.status;
+    status?: SUTComponent.Status;
     createdDateTime?: string;
     updatedDateTime?: string;
 };
 
 export namespace SUTComponent {
 
-    export enum status {
+    export enum Status {
         NEW = 'NEW',
         EXISTING = 'EXISTING',
     }

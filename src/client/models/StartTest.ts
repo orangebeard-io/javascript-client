@@ -1,16 +1,9 @@
-/* generated using openapi-typescript-codegen -- do no edit */
-/* istanbul ignore file */
-/* tslint:disable */
-/* eslint-disable */
-
 import type { Attribute } from './Attribute';
+import { UUID } from 'crypto';
 
-/**
- * Start test request body
- */
 export type StartTest = {
-    testRunUUID: string;
-    suiteUUID: string;
+    testRunUUID: UUID;
+    suiteUUID: UUID;
     testName: string;
     testType: StartTest.testType;
     description?: string;
@@ -25,6 +18,4 @@ export namespace StartTest {
         BEFORE = 'BEFORE',
         AFTER = 'AFTER',
     }
-
-
 }

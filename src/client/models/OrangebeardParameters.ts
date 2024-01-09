@@ -6,5 +6,6 @@ export type OrangebeardParameters = {
     testset: string,
     project: string,
     description?: string,
-    attributes?: Array<Attribute>
+    attributes?: Array<Attribute>,
+    refUrl?: string
 }
