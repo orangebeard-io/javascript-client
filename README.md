@@ -26,7 +26,7 @@
   <h4>
     <a href="https://orangebeard.io">Orangebeard</a> |
     <a href="#installation">Installation</a> |
-    <a href="#configuation">Configuration</a>
+    <a href="#configuration">Configuration</a>
   </h4>
 </div>
 
