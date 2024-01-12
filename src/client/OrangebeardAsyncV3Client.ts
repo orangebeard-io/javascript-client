@@ -42,20 +42,12 @@ export class OrangebeardAsyncV3Client {
         this._promises[temporaryUUID] = this.client.startAnnouncedTestRun(testRunUUID);
     }
 
-    public finishTestRun(testRunUUID: UUID, finishTestRun: FinishTestRun): void {
-        let done = false;
-        Promise.all(Object.values(this._promises))
-            .then(() => {
-                this._promises[randomUUID()] = this.client.finishTestRun(this._uuidMap[testRunUUID], finishTestRun);
-            })
-            .then(() => {
-                done = true;
-                console.log(`All requests done, test run finished.`)
-            });
-
-        const end = new Date().getTime() + 5000; //60s timeout for all calls to finish
-        console.log(`Waiting for ${Object.values(this._promises).length} Orangebeard requests to be processed..`)
-        while (!done && new Date().getTime() < end) { /* intentional wait  */ }
+    public async finishTestRun(testRunUUID: UUID, finishTestRun: FinishTestRun): Promise<void> {
+        console.log(`Waiting for ${Object.values(this._promises).length} Orangebeard requests to be processed..`);
+        await Promise.all(Object.values(this._promises));
+        console.log('All done! Finishing Run...');
+        await this.client.finishTestRun(this._uuidMap[testRunUUID], finishTestRun);
+        console.log('Test Run Finished!');
     }
 
     public startSuite(startSuite: StartSuite): UUID[] {
@@ -76,7 +68,7 @@ export class OrangebeardAsyncV3Client {
                 if (!startSuite.parentSuiteUUID) {
                     testRunUUID = parentUUID as UUID;
                 } else {
-                    testRunUUID = startSuite.testRunUUID;
+                    testRunUUID = this._uuidMap[startSuite.testRunUUID];
                     parentSuiteUUID = parentUUID instanceof Array ?
                         parentUUID[parentUUID.length - 1] as UUID :
                         parentUUID as UUID;
