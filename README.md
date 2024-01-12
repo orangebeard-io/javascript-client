@@ -69,6 +69,7 @@ Look for a config file named `orangebeard.json` in the current working directory
 		}
 	]
 }
+```
 
 ### Environment variables
 The auto config will scan for environment variables:
