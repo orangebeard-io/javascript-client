@@ -42,7 +42,7 @@ export class OrangebeardClient {
     }
 
     private handleError(error) {
-        console.error('The connection with Orangebeard could not be established!', error);
+        console.error('Failed to communicate with Orangebeard!', error);
         this.connectionWithOrangebeardIsValid = false;
     }
 

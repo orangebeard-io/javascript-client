@@ -20,11 +20,7 @@ export class OrangebeardAsyncV3Client {
     readonly config: OrangebeardParameters;
 
     constructor(orangebeardConfig: OrangebeardParameters = undefined) {
-        console.log('constructed with config: ' + JSON.stringify(orangebeardConfig));
         this.config = orangebeardConfig ?? autoConfig;
-
-        console.log('Final config: ' + JSON.stringify(this.config));
-        console.log('CREATING ORANGEBEARD ASYNC V3 CLIENT!');
         this.client = new OrangebeardClient(this.config.endpoint, this.config.token, this.config.project);
     }
 
@@ -35,11 +31,9 @@ export class OrangebeardAsyncV3Client {
 
     public startTestRun(startTestRun: StartTestRun): UUID {
         const temporaryUUID = randomUUID();
-        console.log('STARTING RUN. FAKEUUID: ' + temporaryUUID);
         this._promises[temporaryUUID] = this.client.startTestRun(startTestRun);
         this._promises[temporaryUUID].then((testRunUUID: UUID) => {
             this._uuidMap[temporaryUUID] = testRunUUID;
-            console.log('STARTED RUN. REALUUID: ' + testRunUUID);
         });
         return temporaryUUID;
     }
