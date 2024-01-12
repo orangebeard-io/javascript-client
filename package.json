@@ -2,9 +2,9 @@
     "name": "@orangebeard-io/javascript-client",
     "version": "2.0.0",
     "description": "Orangebeard client for JavaScript",
-    "main": "build/client/index.js",
+    "main": "dist/client/index.js",
     "scripts": {
-        "build": "rimraf ./build && tsc",
+        "build": "rimraf ./dist && tsc",
         "lint": "eslint \"./**/*.js\" --quiet",
         "format:js": "npm run lint -- --fix",
         "format:md": "prettier --write README.md",

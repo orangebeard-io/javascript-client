@@ -10,15 +10,22 @@ import { StartStep } from './models/StartStep';
 import { FinishStep } from './models/FinishStep';
 import { Log } from './models/Log';
 import { Attachment } from './models/Attachment';
+import { OrangebeardParameters } from './models/OrangebeardParameters';
+import autoConfig from './util/autoConfig';
 
 export class OrangebeardAsyncV3Client {
     readonly _promises = new Map<UUID, Promise<any>>;
     readonly _uuidMap = new Map<UUID, UUID>;
     readonly client: OrangebeardClient;
+    readonly config: OrangebeardParameters;
 
-    constructor(endpoint: string, accessToken: UUID, projectName: string) {
+    constructor(orangebeardConfig: OrangebeardParameters = undefined) {
+        console.log('constructed with config: ' + JSON.stringify(orangebeardConfig));
+        this.config = orangebeardConfig ?? autoConfig;
+
+        console.log('Final config: ' + JSON.stringify(this.config));
         console.log('CREATING ORANGEBEARD ASYNC V3 CLIENT!');
-        this.client = new OrangebeardClient(endpoint, accessToken, projectName);
+        this.client = new OrangebeardClient(this.config.endpoint, this.config.token, this.config.project);
     }
 
     private parentPromise(promiseUUID: UUID): Promise<any> {

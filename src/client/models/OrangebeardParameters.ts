@@ -7,5 +7,4 @@ export type OrangebeardParameters = {
     project: string,
     description?: string,
     attributes?: Array<Attribute>,
-    refUrl?: string
 }

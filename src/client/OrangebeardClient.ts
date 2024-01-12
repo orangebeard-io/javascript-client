@@ -18,12 +18,12 @@ interface HttpHeaders {
 }
 
 export class OrangebeardClient {
-    private readonly accessToken: UUID;
+    private readonly accessToken: string;
     private readonly projectName: string;
     private connectionWithOrangebeardIsValid: boolean;
     private readonly httpClient: AxiosInstance;
 
-    constructor(baseURL: string, accessToken: UUID, projectName: string) {
+    constructor(baseURL: string, accessToken: string, projectName: string) {
         this.accessToken = accessToken;
         this.projectName = projectName;
         this.connectionWithOrangebeardIsValid = true;

@@ -11,5 +11,5 @@ coverage/
 oblaunch-*.tmp
 
 # dist
-build/**
+dist/**
 package-lock.json
