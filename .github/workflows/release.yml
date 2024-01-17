@@ -16,7 +16,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '20'
       - name: Cache node modules
         uses: actions/cache@v2
         with:
@@ -48,7 +48,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '20'
       - name: Cache node modules
         uses: actions/cache@v2
         with:
@@ -95,7 +95,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '20'
           registry-url: 'https://registry.npmjs.org'
       - name: Cache node modules
         uses: actions/cache@v2
@@ -115,7 +115,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '20'
           registry-url: 'https://npm.pkg.github.com'
           scope: '@orangebeard-io'
       - name: Publish to GitHub Packages
@@ -135,7 +135,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '20'
       - name: Cache node modules
         uses: actions/cache@v2
         with:
