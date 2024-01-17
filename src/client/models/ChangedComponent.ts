@@ -1,4 +1,4 @@
 export type ChangedComponent = {
-    componentName?: string;
-    componentVersion?: string;
+  componentName?: string;
+  componentVersion?: string;
 };

@@ -1,8 +1,8 @@
-import { UUID } from "crypto";
+import { UUID } from 'crypto';
 
 export type Suite = {
-    suiteUUID: UUID;
-    parentUUID?: UUID;
-    localSuiteName: string;
-    fullSuitePath: Array<string>;
+  suiteUUID: UUID;
+  parentUUID?: UUID;
+  localSuiteName: string;
+  fullSuitePath: Array<string>;
 };

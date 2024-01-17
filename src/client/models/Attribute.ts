@@ -1,4 +1,4 @@
 export type Attribute = {
-    key?: string;
-    value: string;
+  key?: string;
+  value: string;
 };
