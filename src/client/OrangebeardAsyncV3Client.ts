@@ -33,8 +33,7 @@ export default class OrangebeardAsyncV3Client {
   }
 
   private parentPromise(promiseUUID: UUID): Promise<any> {
-    const parentPromise = this.promises[promiseUUID];
-    return parentPromise;
+    return this.promises[promiseUUID];
   }
 
   public startTestRun(startTestRun: StartTestRun): UUID {
@@ -111,7 +110,7 @@ export default class OrangebeardAsyncV3Client {
   public startTest(startTest: StartTest): UUID {
     const temporaryUUID = randomUUID();
 
-    const startTestPromise = new Promise<UUID | null>((resolve) => {
+    this.promises[temporaryUUID] = new Promise<UUID | null>((resolve) => {
       const parent = this.parentPromise(startTest.suiteUUID);
       parent.then((parentUUID) => {
         const parentSuiteUUID: UUID =
@@ -132,12 +131,11 @@ export default class OrangebeardAsyncV3Client {
         });
       });
     });
-    this.promises[temporaryUUID] = startTestPromise;
     return temporaryUUID;
   }
 
   public finishTest(testUUID: UUID, finishTest: FinishTest): void {
-    const finishTestPromise = new Promise((resolve) => {
+    this.promises[randomUUID()] = new Promise((resolve) => {
       const parent = this.parentPromise(testUUID);
       parent.then((actualTestUUID) => {
         const realFinishTest: FinishTest = {
@@ -148,13 +146,12 @@ export default class OrangebeardAsyncV3Client {
         finishTestCall.then(() => resolve(undefined));
       });
     });
-    this.promises[randomUUID()] = finishTestPromise;
   }
 
   public startStep(startStep: StartStep): UUID {
     const temporaryUUID = randomUUID();
 
-    const startStepPromise = new Promise<UUID | null>((resolve) => {
+    this.promises[temporaryUUID] = new Promise<UUID | null>((resolve) => {
       const parent =
         startStep.parentStepUUID !== undefined
           ? this.parentPromise(startStep.parentStepUUID)
@@ -184,12 +181,11 @@ export default class OrangebeardAsyncV3Client {
         });
       });
     });
-    this.promises[temporaryUUID] = startStepPromise;
     return temporaryUUID;
   }
 
   public finishStep(stepUUID: UUID, finishStep: FinishStep): void {
-    const finishStepPromise = new Promise((resolve) => {
+    this.promises[randomUUID()] = new Promise((resolve) => {
       const parent = this.parentPromise(stepUUID);
       parent.then((actualStepUUID) => {
         const realFinishStep = {
@@ -200,12 +196,11 @@ export default class OrangebeardAsyncV3Client {
         finishStepCall.then(() => resolve(undefined));
       });
     });
-    this.promises[randomUUID()] = finishStepPromise;
   }
 
   public log(log: Log): UUID {
     const temporaryUUID = randomUUID();
-    const logPromise = new Promise<UUID | null>((resolve) => {
+    this.promises[temporaryUUID] = new Promise<UUID | null>((resolve) => {
       const parent =
         log.stepUUID !== undefined
           ? this.parentPromise(log.stepUUID)
@@ -235,8 +230,6 @@ export default class OrangebeardAsyncV3Client {
         });
       });
     });
-
-    this.promises[temporaryUUID] = logPromise;
     return temporaryUUID;
   }
 
@@ -250,7 +243,7 @@ export default class OrangebeardAsyncV3Client {
 
   public sendAttachment(attachment: Attachment): UUID {
     const temporaryUUID = randomUUID();
-    const attachmentPromise = new Promise<UUID | null>((resolve) => {
+    this.promises[temporaryUUID] = new Promise<UUID | null>((resolve) => {
       const parent = this.parentPromise(attachment.metaData.logUUID);
       parent.then((actualLogUUID) => {
         const realAttachment = {
@@ -274,7 +267,6 @@ export default class OrangebeardAsyncV3Client {
         });
       });
     });
-    this.promises[temporaryUUID] = attachmentPromise;
     return temporaryUUID;
   }
 }
