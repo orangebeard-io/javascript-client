@@ -28,6 +28,7 @@ function updateConfigParametersFromEnv(
   currentConfig.attributes = process.env.ORANGEBEARD_ENDPOINT
     ? getAttributesFromString(process.env.ORANGEBEARD_ENDPOINT)
     : currentConfig.attributes;
+  currentConfig.ref_url = process.env.ORANGEBEARD_REF_URL || currentConfig.ref_url;
 
   return currentConfig;
 }

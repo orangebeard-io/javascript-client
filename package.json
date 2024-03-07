@@ -47,7 +47,7 @@
         "eslint-plugin-prettier": "4.0.0",
         "jest": "^27.5.1",
         "lodash": "4.17.21",
-        "nock": "13.2.4",
+        "nock": "^13.5.4",
         "prettier": "2.6.1",
         "release-it": "^16.1.5",
         "rimraf": "^5.0.5",
