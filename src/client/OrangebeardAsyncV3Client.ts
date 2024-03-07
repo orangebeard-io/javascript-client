@@ -60,13 +60,14 @@ export default class OrangebeardAsyncV3Client {
     await this.client.finishTestRun(this.uuidMap[testRunUUID], finishTestRun);
     console.log('Test Run Finished!');
   }
+
   /* eslint-enable no-console */
 
   public startSuite(startSuite: StartSuite): UUID[] {
     const tempUUIDs: UUID[] = startSuite.suiteNames.map(() => randomUUID());
 
     const parent =
-      startSuite.parentSuiteUUID !== undefined
+      startSuite.parentSuiteUUID != null
         ? this.parentPromise(startSuite.parentSuiteUUID)
         : this.parentPromise(startSuite.testRunUUID);
 
@@ -153,7 +154,7 @@ export default class OrangebeardAsyncV3Client {
 
     this.promises[temporaryUUID] = new Promise<UUID | null>((resolve) => {
       const parent =
-        startStep.parentStepUUID !== undefined
+        startStep.parentStepUUID != null
           ? this.parentPromise(startStep.parentStepUUID)
           : this.parentPromise(startStep.testUUID);
       parent.then((parentUUID) => {
@@ -202,9 +203,7 @@ export default class OrangebeardAsyncV3Client {
     const temporaryUUID = randomUUID();
     this.promises[temporaryUUID] = new Promise<UUID | null>((resolve) => {
       const parent =
-        log.stepUUID !== undefined
-          ? this.parentPromise(log.stepUUID)
-          : this.parentPromise(log.testUUID);
+        log.stepUUID != null ? this.parentPromise(log.stepUUID) : this.parentPromise(log.testUUID);
       parent.then((parentUUID) => {
         let testUUID: UUID;
         let stepUUID: UUID | undefined;
