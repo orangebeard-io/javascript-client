@@ -12,13 +12,13 @@ jobs:
       releaseVersion: ${{ steps.exposeVersion.outputs.releaseVersion }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
       - name: Cache node modules
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: node_modules
           key: node_modules-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
@@ -36,7 +36,7 @@ jobs:
       versionInfo: ${{ steps.readChangelogEntry.outputs.log_entry }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Configure git
         run: |
           git config --global user.email "info@orangebeard.io"
@@ -46,11 +46,11 @@ jobs:
           git tag -a v${{ needs.get-version.outputs.releaseVersion }} -m ${{ needs.get-version.outputs.releaseVersion }}
           git push origin main --follow-tags
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
       - name: Cache node modules
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: node_modules
           key: node_modules-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
@@ -61,7 +61,7 @@ jobs:
       - name: Create CHANGELOG.md
         run: npm run create-changelog
       - name: Upload changelog as artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: changelog
           path: CHANGELOG.md
@@ -70,22 +70,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Download changelog for artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: changelog
       - name: Create Release
         id: createRelease
-        uses: actions/create-release@v1
+        uses: ncipollo/release-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ needs.get-version.outputs.releaseVersion }}
-          release_name: ${{ needs.get-version.outputs.releaseVersion }}
-          body_path: CHANGELOG.md
-          draft: false
-          prerelease: false
+          tag: v${{ needs.get-version.outputs.releaseVersion }}
+          name: ${{ needs.get-version.outputs.releaseVersion }}
+          bodyFile: CHANGELOG.md
   publish-release:
     needs: [get-version, prepare-release, create-release]
     runs-on: ubuntu-latest
@@ -94,14 +92,14 @@ jobs:
       id-token: write
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org'
       - name: Cache node modules
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: node_modules
           key: node_modules-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
@@ -116,7 +114,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
           registry-url: 'https://npm.pkg.github.com'
@@ -130,17 +128,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Configure git
         run: |
           git config --global user.email "info@orangebeard.io"
           git config --global user.name "Orangebeard.io"
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
       - name: Cache node modules
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: node_modules
           key: node_modules-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
