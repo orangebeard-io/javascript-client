@@ -16,7 +16,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '20'
       - name: Cache node modules
         uses: actions/cache@v2
         with:
@@ -48,7 +48,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '20'
       - name: Cache node modules
         uses: actions/cache@v2
         with:
@@ -95,7 +95,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '20'
           registry-url: 'https://registry.npmjs.org'
       - name: Cache node modules
         uses: actions/cache@v2
@@ -104,16 +104,18 @@ jobs:
           key: node_modules-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             node_modules-
+      - name: Transpile to JS
+        run: npm run build
       - name: Install Node dependencies
         run: npm install
       - name: Publish to NPM
-        run: npm publish --access public
+        run: npm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '20'
           registry-url: 'https://npm.pkg.github.com'
           scope: '@orangebeard-io'
       - name: Publish to GitHub Packages
@@ -133,7 +135,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '20'
       - name: Cache node modules
         uses: actions/cache@v2
         with:

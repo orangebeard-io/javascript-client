@@ -38,38 +38,48 @@
 npm install --save-dev @orangebeard-io/javascript-client
 ```
 
+## Build from source
+```shell
+npm run build
+```
+Make sure to have typescript installed.
+
 ## Configuration
+  
+Usually, the client is used from a listener that connects the client to a test tool. Listeners can provide their own OrangebeardParameters object.  
+If no configuration object is provided, the client will try to auto-configure in the following ways: 
 
-Create a new file named `orangebeard.json` in the project root folder, next to `package.json`. Add the following entry:
+### orangebeard.json
 
-```JSON
-{
-  "endpoint": "https://company.orangebeard.app",
-  "accessToken": "00000000-0000-0000-0000-000000000000",
-  "project": "project_name",
-  "testset": "testset_NAME_EXAMPLE",
-  "description": "Your description",
-  "attributes": [
-    {
-      "key": "YourKey",
-      "value": "YourValue"
-    },
-    {
-      "value": "YourValue"
-    }
-  ]
+Look for a config file named `orangebeard.json` in the current working directory or higher in the hierarchy (it will scan all the way up to `/`). The json file is expected to contain an OrangebeardParameters object: 
+ ```json
+ {
+	"endpoint": "https://my.orangebeard.app",
+	"token": "xxxxxxxxxxxxx-xxxx-xxxx-xxxxxxxxxxxx",
+	"project": "my-project",
+	"testset": "Test set name",
+	"description": "Test run description",
+	"attributes": [
+		{
+			"key": "Key 1",
+			"value": "Some value"
+		},
+		{
+			"value": "Tag value"
+		}
+	]
 }
 ```
 
-### Environment properties
+### Environment variables
+The auto config will scan for environment variables:
 
-Properties can also be set in the build, by passing them as environment variables. It's important to mention that environment variables have precedence over the `orangebeard.json` definition.
-
-```shell
-$ export ORANGEBEARD_ENDPOINT=https://company.orangebeard.app
-$ export ORANGEBEARD_ACCESSTOKEN=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
-$ export ORANGEBEARD_PROJECT=piet_personal
-$ export ORANGEBEARD_TESTSET=piet_TEST_EXAMPLE
-$ export ORANGEBEARD_DESCRIPTION=My awesome testrun
-$ export ORANGEBEARD_ATTRIBUTES=key:value; value;
-```
+ ```shell
+ ORANGEBEARD_ENDPOINT=https://company.orangebeard.app
+ ORANGEBEARD_TOKEN=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+ ORANGEBEARD_PROJECT=piet_personal
+ ORANGEBEARD_TESTSET=piet_TEST_EXAMPLE
+ ORANGEBEARD_DESCRIPTION=My awesome testrun
+ ORANGEBEARD_ATTRIBUTES=key:value; value;
+ ```
+ Note that if auto configuration is used and a value is present in both orangebeard.json and in the environment settings, the environment setting will take precedence.
