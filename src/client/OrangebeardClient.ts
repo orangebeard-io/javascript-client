@@ -39,7 +39,7 @@ export default class OrangebeardClient {
 
     axiosRetry(this.httpClient, {
       retries: 4,
-      retryDelay: (retryCount) => 2 ** retryCount,
+      retryDelay: (retryCount) => 2 ** retryCount * 1000,
       retryCondition: () => true,
     });
   }
