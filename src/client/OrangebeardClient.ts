@@ -38,8 +38,8 @@ export default class OrangebeardClient {
     });
 
     axiosRetry(this.httpClient, {
-      retries: 3,
-      retryDelay: (retryCount) => 2 ** retryCount * 1000,
+      retries: 4,
+      retryDelay: (retryCount) => 2 ** retryCount,
       retryCondition: () => true,
     });
   }
