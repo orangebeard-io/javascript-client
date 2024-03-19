@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
+import axiosRetry from 'axios-retry';
 import { UUID } from 'crypto';
 import FormData from 'form-data';
 
@@ -35,6 +36,12 @@ export default class OrangebeardClient {
       baseURL,
       timeout: 10000,
     });
+
+    axiosRetry(this.httpClient, {
+      retries: 4,
+      retryDelay: (retryCount) => 2 ** retryCount * 1000,
+      retryCondition: () => true,
+    });
   }
 
   private static getAuthorizationHeaders(accessToken: string): HttpHeaders {
@@ -49,6 +56,7 @@ export default class OrangebeardClient {
     console.error('Failed to communicate with Orangebeard!', error);
     this.connectionWithOrangebeardIsValid = false;
   }
+
   /* eslint-enable no-console */
 
   public async startTestRun(testRun: StartTestRun): Promise<UUID | null> {

@@ -33,6 +33,7 @@
     "dependencies": {
         "@types/node": "^20.7.0",
         "axios": "^1.6.5",
+        "axios-retry": "^4.0.0",
         "form-data": "^4.0.0"
     },
     "devDependencies": {
