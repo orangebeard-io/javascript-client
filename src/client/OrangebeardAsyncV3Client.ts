@@ -247,7 +247,7 @@ export default class OrangebeardAsyncV3Client {
       parent.then((actualLogUUID) => {
         const realAttachment = {
           ...attachment,
-          metadata: {
+          metaData: {
             ...attachment.metaData,
             testRunUUID: this.uuidMap[attachment.metaData.testRunUUID],
             testUUID: this.uuidMap[attachment.metaData.testUUID],

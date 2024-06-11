@@ -1,7 +1,6 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import axiosRetry from 'axios-retry';
 import { UUID } from 'crypto';
-import FormData from 'form-data';
 
 import { StartTestRun } from './models/StartTestRun';
 import { FinishTestRun } from './models/FinishTestRun';
@@ -215,17 +214,14 @@ export default class OrangebeardClient {
   public async sendAttachment(attachment: Attachment): Promise<UUID | null> {
     try {
       const formData = new FormData();
-      const fileBlob = new Blob([attachment.file.content], { type: attachment.file.contentType });
-      const metaBlob = new Blob([JSON.stringify(attachment.metaData)], {
-        type: 'application/json',
-      });
 
-      formData.append('json', metaBlob);
+      const fileBlob = new Blob([attachment.file.content], { type: attachment.file.contentType });
+
+      formData.append('json', JSON.stringify(attachment.metaData));
       formData.append('attachment', fileBlob, attachment.file.name);
 
       const headers = {
         Authorization: `Bearer ${this.accessToken}`,
-        'Content-Type': 'multipart/form-data',
       };
 
       const response: AxiosResponse<UUID> = await this.httpClient.post(
