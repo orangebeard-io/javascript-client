@@ -15,6 +15,6 @@ export type AttachmentMetaData = {
 
 export type AttachmentFile = {
   name: string;
-  content: Float32Array;
+  content: Float32Array | Uint8Array;
   contentType: string;
 };
