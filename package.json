@@ -1,6 +1,6 @@
 {
     "name": "@orangebeard-io/javascript-client",
-    "version": "2.0.6",
+    "version": "2.0.7",
     "description": "Orangebeard client for JavaScript",
     "main": "dist/client/index.js",
     "scripts": {
