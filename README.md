@@ -13,7 +13,7 @@
       alt="NPM Version" />
   </a>
   <a href="https://github.com/orangebeard-io/javascript-client/actions">
-    <img src="https://img.shields.io/github/workflow/status/orangebeard-io/javascript-client/release?style=flat-square"
+    <img src="https://img.shields.io/github/actions/workflow/status/orangebeard-io/javascript-client/release.yml?branch=main&style=flat-square"
       alt="Build Status" />
   </a>
   <a href="https://github.com/orangebeard-io/javascript-client/blob/main/LICENSE">
