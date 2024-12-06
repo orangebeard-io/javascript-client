@@ -214,7 +214,6 @@ export default class OrangebeardClient {
   public async sendAttachment(attachment: Attachment): Promise<UUID | null> {
     try {
       const formData = new FormData();
-
       const fileBlob = new Blob([attachment.file.content], { type: attachment.file.contentType });
 
       formData.append('json', JSON.stringify(attachment.metaData));
