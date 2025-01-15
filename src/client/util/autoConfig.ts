@@ -46,7 +46,7 @@ function getConfig(pathToResolve: string): OrangebeardParameters {
         }
         return updateConfigParametersFromEnv(config);
       } catch (error) {
-        return undefined;
+        return updateConfigParametersFromEnv(undefined);
       }
     }
 
@@ -55,8 +55,7 @@ function getConfig(pathToResolve: string): OrangebeardParameters {
 
     traversing = pathToResolve !== prevPath;
   }
-
-  return undefined;
+  return updateConfigParametersFromEnv(undefined);
 }
 /* eslint-enable no-param-reassign */
 export default getConfig(process.cwd());

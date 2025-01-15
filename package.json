@@ -1,56 +1,59 @@
 {
-    "name": "@orangebeard-io/javascript-client",
-    "version": "2.0.7",
-    "description": "Orangebeard client for JavaScript",
-    "main": "dist/client/index.js",
-    "scripts": {
-        "build": "rimraf ./dist && tsc",
-        "lint": "eslint . --ext .ts",
-        "format:js": "npm run lint -- --fix",
-        "format:md": "prettier --write README.md",
-        "format": "npm run format:js && npm run format:md",
-        "test": "jest --unhandled-rejections=none --config ./jest.config.js",
-        "test:coverage": "jest --unhandled-rejections=none --coverage",
-        "get-version": "echo $npm_package_version",
-        "update-version": "release-it --ci --no-git --no-npm.publish",
-        "create-changelog": "auto-changelog --template changelog-template.hbs --starting-version v$npm_package_version"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/orangebeard-io/javascript-client.git"
-    },
-    "keywords": [
-        "orangebeard",
-        "javascript",
-        "client"
-    ],
-    "author": "Orangebeard.io",
-    "license": "Apache-2.0",
-    "bugs": {
-        "url": "https://github.com/orangebeard-io/javascript-client/issues"
-    },
-    "homepage": "https://github.com/orangebeard-io/javascript-client#readme",
-    "dependencies": {
-        "@types/node": "^20.14.2",
-        "axios": "^1.7.2",
-        "axios-retry": "^4.4.0"
-    },
-    "devDependencies": {
-        "@typescript-eslint/eslint-plugin": "^6.19.0",
-        "@typescript-eslint/parser": "^6.19.0",
-        "auto-changelog": "2.4.0",
-        "eslint": "8.56.0",
-        "eslint-config-airbnb-base": "15.0.0",
-        "eslint-config-airbnb-typescript": "^17.1.0",
-        "eslint-config-prettier": "8.5.0",
-        "eslint-plugin-import": "2.25.4",
-        "eslint-plugin-prettier": "4.0.0",
-        "jest": "^27.5.1",
-        "lodash": "4.17.21",
-        "nock": "^13.5.4",
-        "prettier": "2.6.1",
-        "release-it": "^16.1.5",
-        "rimraf": "^5.0.5",
-        "typescript": "^5.3.3"
-    }
+  "name": "@orangebeard-io/javascript-client",
+  "version": "2.0.7",
+  "description": "Orangebeard client for JavaScript",
+  "main": "dist/client/index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rimraf ./dist && tsc",
+    "lint": "eslint . --ext .ts",
+    "format:js": "npm run lint -- --fix",
+    "format:md": "prettier --write README.md",
+    "format": "npm run format:js && npm run format:md",
+    "test": "jest --unhandled-rejections=none --config ./jest.config.js",
+    "test:coverage": "jest --unhandled-rejections=none --coverage",
+    "get-version": "echo $npm_package_version",
+    "update-version": "release-it --ci --no-git --no-npm.publish",
+    "create-changelog": "auto-changelog --template changelog-template.hbs --starting-version v$npm_package_version"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/orangebeard-io/javascript-client.git"
+  },
+  "keywords": [
+    "orangebeard",
+    "javascript",
+    "client"
+  ],
+  "author": "Orangebeard.io",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/orangebeard-io/javascript-client/issues"
+  },
+  "homepage": "https://github.com/orangebeard-io/javascript-client#readme",
+  "dependencies": {
+    "@types/node": "^20.14.2",
+    "axios": "^1.7.4",
+    "axios-retry": "^4.4.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "auto-changelog": "2.4.0",
+    "eslint": "8.56.0",
+    "eslint-config-airbnb-base": "15.0.0",
+    "eslint-config-airbnb-typescript": "^17.1.0",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-plugin-import": "2.25.4",
+    "eslint-plugin-prettier": "4.0.0",
+    "jest": "^27.5.1",
+    "lodash": "4.17.21",
+    "nock": "^13.5.4",
+    "prettier": "2.6.1",
+    "release-it": "^16.1.5",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.3.3"
+  }
 }
