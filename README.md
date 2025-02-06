@@ -67,7 +67,8 @@ Look for a config file named `orangebeard.json` in the current working directory
 		{
 			"value": "Tag value"
 		}
-	]
+	],
+    "referenceUrl": "https://my-ref-url.tld/ref" 
 }
 ```
 
@@ -81,5 +82,6 @@ The auto config will scan for environment variables:
  ORANGEBEARD_TESTSET=piet_TEST_EXAMPLE
  ORANGEBEARD_DESCRIPTION=My awesome testrun
  ORANGEBEARD_ATTRIBUTES=key:value; value;
+ ORANGEBEARD_REFERENCE_URL=https://my-ref-url.tld/ref
  ```
  Note that if auto configuration is used and a value is present in both orangebeard.json and in the environment settings, the environment setting will take precedence.
