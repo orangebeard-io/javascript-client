@@ -25,10 +25,22 @@ function updateConfigParametersFromEnv(
   currentConfig.testset = process.env.ORANGEBEARD_TESTSET || currentConfig.testset;
   currentConfig.project = process.env.ORANGEBEARD_PROJECT || currentConfig.project;
   currentConfig.description = process.env.ORANGEBEARD_DESCRIPTION || currentConfig.description;
-  currentConfig.attributes = process.env.ORANGEBEARD_ENDPOINT
-    ? getAttributesFromString(process.env.ORANGEBEARD_ENDPOINT)
-    : currentConfig.attributes;
-  currentConfig.ref_url = process.env.ORANGEBEARD_REF_URL || currentConfig.ref_url;
+
+  const attributesFromEnv = process.env.ORANGEBEARD_ATTRIBUTES
+    ? getAttributesFromString(process.env.ORANGEBEARD_ATTRIBUTES)
+    : [];
+
+  currentConfig.referenceUrl = process.env.ORANGEBEARD_REFERENCE_URL || currentConfig.referenceUrl;
+
+  if (!currentConfig.attributes) {
+    currentConfig.attributes = [];
+  }
+
+  currentConfig.attributes = currentConfig.attributes.concat(attributesFromEnv);
+
+  if (currentConfig.referenceUrl !== undefined) {
+    currentConfig.attributes.push({ key: 'reference_url', value: currentConfig.referenceUrl });
+  }
 
   return currentConfig;
 }
@@ -46,7 +58,7 @@ function getConfig(pathToResolve: string): OrangebeardParameters {
         }
         return updateConfigParametersFromEnv(config);
       } catch (error) {
-        return updateConfigParametersFromEnv(undefined);
+        /* empty */
       }
     }
 
@@ -55,7 +67,13 @@ function getConfig(pathToResolve: string): OrangebeardParameters {
 
     traversing = pathToResolve !== prevPath;
   }
-  return updateConfigParametersFromEnv(undefined);
+  return updateConfigParametersFromEnv({
+    endpoint: undefined,
+    project: undefined,
+    testset: undefined,
+    token: undefined,
+  });
 }
+
 /* eslint-enable no-param-reassign */
 export default getConfig(process.cwd());

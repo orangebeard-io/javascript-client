@@ -7,5 +7,5 @@ export type OrangebeardParameters = {
   project: string;
   description?: string;
   attributes?: Array<Attribute>;
-  ref_url?: string;
+  referenceUrl?: string;
 };
