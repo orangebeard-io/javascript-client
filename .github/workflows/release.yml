@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+permissions:
+  id-token: write 
+  contents: read
+
 jobs:
   get-version:
     runs-on: ubuntu-latest
@@ -87,32 +91,19 @@ jobs:
   publish-release:
     needs: [get-version, prepare-release, create-release]
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org'
-      - name: Cache node modules
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: node_modules-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            node_modules-
-      - name: Transpile to JS
-        run: npm run build
-      - name: Install Node dependencies
-        run: npm install
-      - name: Publish to NPM
-        run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # Ensure npm 11.5.1 or later is installed
+      - name: Update npm
+        run: npm install -g npm@latest
+      - run: npm ci
+      - run: npm run build --if-present
+      - run: npm test
+      - run: npm publish
   update-version:
     needs: [get-version, prepare-release, create-release, publish-release]
     runs-on: ubuntu-latest
