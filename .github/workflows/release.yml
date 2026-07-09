@@ -29,7 +29,7 @@ jobs:
           restore-keys: |
             node_modules-
       - name: Install Node dependencies
-        run: npm install
+        run: npm ci
       - name: Get version from package.json
         id: exposeVersion
         run: echo "releaseVersion=$(npm run get-version --silent)" >> $GITHUB_OUTPUT
@@ -61,7 +61,7 @@ jobs:
           restore-keys: |
             node_modules-
       - name: Install Node dependencies
-        run: npm install
+        run: npm ci
       - name: Create CHANGELOG.md
         run: npm run create-changelog
       - name: Upload changelog as artifact
@@ -123,7 +123,7 @@ jobs:
           restore-keys: |
             node_modules-
       - name: Install Node dependencies
-        run: npm install
+        run: npm ci
       - name: Update version
         run: |
           npm run update-version
