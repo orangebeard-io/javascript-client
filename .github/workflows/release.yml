@@ -16,13 +16,13 @@ jobs:
       releaseVersion: ${{ steps.exposeVersion.outputs.releaseVersion }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '24'
       - name: Cache node modules
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: node_modules
           key: node_modules-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
@@ -40,7 +40,7 @@ jobs:
       versionInfo: ${{ steps.readChangelogEntry.outputs.log_entry }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Configure git
         run: |
           git config --global user.email "info@orangebeard.io"
@@ -50,11 +50,11 @@ jobs:
           git tag -a v${{ needs.get-version.outputs.releaseVersion }} -m ${{ needs.get-version.outputs.releaseVersion }}
           git push origin main --follow-tags
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '24'
       - name: Cache node modules
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: node_modules
           key: node_modules-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
@@ -65,7 +65,7 @@ jobs:
       - name: Create CHANGELOG.md
         run: npm run create-changelog
       - name: Upload changelog as artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: changelog
           path: CHANGELOG.md
@@ -74,9 +74,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Download changelog for artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: changelog
       - name: Create Release
@@ -92,14 +92,11 @@ jobs:
     needs: [get-version, prepare-release, create-release]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
           node-version: '24'
           registry-url: 'https://registry.npmjs.org'
-      # Ensure npm 11.5.1 or later is installed
-      - name: Update npm
-        run: npm install -g npm@latest
       - run: npm ci
       - run: npm run build --if-present
       - run: npm test
@@ -109,17 +106,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Configure git
         run: |
           git config --global user.email "info@orangebeard.io"
           git config --global user.name "Orangebeard.io"
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '24'
       - name: Cache node modules
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: node_modules
           key: node_modules-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
