@@ -17,6 +17,8 @@ type HttpHeaders = {
   [key: string]: string;
 };
 
+const USER_AGENT_BASE = 'orangebeard-javascript-client';
+
 export default class OrangebeardClient {
   private readonly accessToken: string;
 
@@ -26,14 +28,17 @@ export default class OrangebeardClient {
 
   private readonly httpClient: AxiosInstance;
 
-  constructor(baseURL: string, accessToken: string, projectName: string) {
+  constructor(baseURL: string, accessToken: string, projectName: string, listenerId?: string) {
     this.accessToken = accessToken;
     this.projectName = projectName;
     this.connectionWithOrangebeardIsValid = true;
 
+    const userAgent = listenerId ? `${USER_AGENT_BASE}/${listenerId}` : USER_AGENT_BASE;
+
     this.httpClient = axios.create({
       baseURL,
       timeout: 10000,
+      headers: { 'User-Agent': userAgent },
     });
 
     const nonRetryableStatuses = new Set([401, 403, 404, 429]);
@@ -70,7 +75,6 @@ export default class OrangebeardClient {
     return { name: error.name, message: error.message };
   }
 
-  /* eslint-disable no-console */
   private handleError(error: Error | AxiosError) {
     console.error(
       'Failed to communicate with Orangebeard!',
@@ -78,8 +82,6 @@ export default class OrangebeardClient {
     );
     this.connectionWithOrangebeardIsValid = false;
   }
-
-  /* eslint-enable no-console */
 
   public async startTestRun(testRun: StartTestRun): Promise<UUID | null> {
     if (this.connectionWithOrangebeardIsValid) {

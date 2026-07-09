@@ -23,12 +23,13 @@ export default class OrangebeardAsyncV3Client {
 
   readonly config: OrangebeardParameters;
 
-  constructor(orangebeardConfig: OrangebeardParameters = undefined) {
+  constructor(orangebeardConfig: OrangebeardParameters = undefined, listenerId?: string) {
     this.config = orangebeardConfig ?? autoConfig;
     this.client = new OrangebeardClient(
       this.config.endpoint,
       this.config.token,
       this.config.project,
+      listenerId,
     );
   }
 
@@ -50,7 +51,6 @@ export default class OrangebeardAsyncV3Client {
     this.promises[temporaryUUID] = this.client.startAnnouncedTestRun(testRunUUID);
   }
 
-  /* eslint-disable no-console */
   public async finishTestRun(testRunUUID: UUID, finishTestRun: FinishTestRun): Promise<void> {
     console.log(
       `Waiting for ${Object.values(this.promises).length} Orangebeard requests to be processed..`,
@@ -60,8 +60,6 @@ export default class OrangebeardAsyncV3Client {
     await this.client.finishTestRun(this.uuidMap[testRunUUID], finishTestRun);
     console.log('Test Run Finished!');
   }
-
-  /* eslint-enable no-console */
 
   public startSuite(startSuite: StartSuite): UUID[] {
     const tempUUIDs: UUID[] = startSuite.suiteNames.map(() => randomUUID());
