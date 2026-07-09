@@ -36,10 +36,16 @@ export default class OrangebeardClient {
       timeout: 10000,
     });
 
+    const nonRetryableStatuses = new Set([401, 403, 404, 429]);
+
     axiosRetry(this.httpClient, {
       retries: 4,
       retryDelay: (retryCount) => 2 ** retryCount * 1000,
-      retryCondition: () => true,
+      retryCondition: (error) => {
+        const status = error.response?.status;
+
+        return !status || !nonRetryableStatuses.has(status);
+      },
     });
   }
 
@@ -50,9 +56,26 @@ export default class OrangebeardClient {
     };
   }
 
+  private static sanitizeError(error: Error | AxiosError): Record<string, unknown> {
+    if (axios.isAxiosError(error)) {
+      return {
+        message: error.message,
+        code: error.code,
+        method: error.config?.method?.toUpperCase(),
+        url: error.config?.url,
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+      };
+    }
+    return { name: error.name, message: error.message };
+  }
+
   /* eslint-disable no-console */
   private handleError(error: Error | AxiosError) {
-    console.error('Failed to communicate with Orangebeard!', error);
+    console.error(
+      'Failed to communicate with Orangebeard!',
+      OrangebeardClient.sanitizeError(error),
+    );
     this.connectionWithOrangebeardIsValid = false;
   }
 
