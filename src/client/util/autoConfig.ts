@@ -3,7 +3,6 @@ import fs from 'fs';
 import { OrangebeardParameters } from '../models/OrangebeardParameters';
 import { Attribute } from '../models/Attribute';
 
-/* eslint-disable no-param-reassign */
 function getAttributesFromString(stringAttr: string): Array<Attribute> {
   return stringAttr
     ? stringAttr.split(';').map((attribute) => {
@@ -57,7 +56,7 @@ function getConfig(pathToResolve: string): OrangebeardParameters {
           config = undefined;
         }
         return updateConfigParametersFromEnv(config);
-      } catch (error) {
+      } catch {
         /* empty */
       }
     }
@@ -75,5 +74,4 @@ function getConfig(pathToResolve: string): OrangebeardParameters {
   });
 }
 
-/* eslint-enable no-param-reassign */
 export default getConfig(process.cwd());
