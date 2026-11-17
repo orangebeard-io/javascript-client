@@ -1,5 +1,4 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
-import axiosRetry from 'axios-retry';
 import { UUID } from 'crypto';
 
 import { StartTestRun } from './models/StartTestRun';
@@ -12,6 +11,7 @@ import { StartStep } from './models/StartStep';
 import { FinishStep } from './models/FinishStep';
 import { Log } from './models/Log';
 import { Attachment } from './models/Attachment';
+import { applyRetry } from './util/retry';
 
 type HttpHeaders = {
   [key: string]: string;
@@ -43,7 +43,7 @@ export default class OrangebeardClient {
 
     const nonRetryableStatuses = new Set([401, 403, 404, 429]);
 
-    axiosRetry(this.httpClient, {
+    applyRetry(this.httpClient, {
       retries: 4,
       retryDelay: (retryCount) => 2 ** retryCount * 1000,
       retryCondition: (error) => {
