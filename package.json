@@ -58,5 +58,6 @@
   },
   "overrides": {
     "basic-ftp": "^6.2.6"
-  }
+  },
+  "types": "dist/client/index.d.ts"
 }
