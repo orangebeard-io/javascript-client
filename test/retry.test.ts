@@ -67,6 +67,25 @@ describe('applyRetry', () => {
     expect(scope.isDone()).toBe(false);
   });
 
+  it('does not retry when retryCondition turns false during the back-off delay', async () => {
+    const scope = nock(baseURL).get('/x').reply(500).get('/x').reply(200);
+    let allowRetry = true;
+    const client = axios.create({ baseURL });
+    applyRetry(client, {
+      retries: 3,
+      retryDelay: () => 100,
+      retryCondition: () => allowRetry,
+    });
+
+    const request = client.get('/x');
+    setTimeout(() => {
+      allowRetry = false;
+    }, 50);
+
+    await expect(request).rejects.toMatchObject({ response: { status: 500 } });
+    expect(scope.isDone()).toBe(false);
+  });
+
   it('retries network errors', async () => {
     nock(baseURL).get('/x').replyWithError('boom').get('/x').reply(200, 'ok');
     const { client } = createClient();

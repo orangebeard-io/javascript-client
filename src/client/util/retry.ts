@@ -24,14 +24,18 @@ export function applyRetry(client: AxiosInstance, options: RetryOptions): void {
       throw error;
     }
 
+    const shouldRetry = () => (options.retryCondition ? options.retryCondition(error) : true);
     const retryCount = (config.__retryCount ?? 0) + 1;
-    const shouldRetry = options.retryCondition ? options.retryCondition(error) : true;
-    if (!shouldRetry || retryCount > options.retries) {
+    if (retryCount > options.retries || !shouldRetry()) {
       throw error;
     }
 
     config.__retryCount = retryCount;
     await sleep(options.retryDelay(retryCount));
+    // conditions may have changed while backing off (e.g. reporting was disabled meanwhile)
+    if (!shouldRetry()) {
+      throw error;
+    }
     return client.request(config);
   });
 }
